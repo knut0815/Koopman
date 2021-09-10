@@ -1,2 +1,2 @@
 # Koopman-
-Data-driven modelling of complex dynamical systems via Deep Koopman Operators. 
+Data-driven modelling of complex systems via Deep Koopman Operators. 
