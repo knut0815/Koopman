@@ -28,7 +28,8 @@ powerful and principled methods for controlling linear systems.
 
 ![Exact Lorenz System](https://raw.githubusercontent.com/AidanRocke/Koopman/main/Lorenz_system/images/exact_lorenz.png)*Exact Lorenz System*
 
-![Interpolated Lorenz System](https://raw.githubusercontent.com/AidanRocke/Koopman/main/Lorenz_system/images/approximate_lorenz.png)*Interpolated Lorenz System*
+![Interpolated Lorenz System](https://raw.githubusercontent.com/AidanRocke/Koopman/main/Lorenz_system/images/approximate_lorenz.png)
+<figcaption align = "center"><b>Interpolated Lorenz System</b></figcaption>
 
 ## References:
 
