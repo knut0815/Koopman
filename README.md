@@ -26,11 +26,9 @@ powerful and principled methods for controlling linear systems.
 
   b. Code: (1) [Simulated data for the Lorenz system](https://github.com/AidanRocke/Koopman/blob/main/Lorenz_system/simulated_data.py), (2) [Model training and evaluation](https://github.com/AidanRocke/Koopman/blob/main/Lorenz_system/lorenz_koopman.py).
 
-![Exact Lorenz System](https://raw.githubusercontent.com/AidanRocke/Koopman/main/Lorenz_system/images/exact_lorenz.png)
-*Exact Lorenz System*
+![Exact Lorenz System](https://raw.githubusercontent.com/AidanRocke/Koopman/main/Lorenz_system/images/exact_lorenz.png)*Exact Lorenz System*
 
-![Interpolated Lorenz System](https://raw.githubusercontent.com/AidanRocke/Koopman/main/Lorenz_system/images/approximate_lorenz.png)
-*Interpolated Lorenz System*
+![Interpolated Lorenz System](https://raw.githubusercontent.com/AidanRocke/Koopman/main/Lorenz_system/images/approximate_lorenz.png)*Interpolated Lorenz System*
 
 ## References:
 
