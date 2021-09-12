@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Fri Sep 10 10:52:10 2021
+Created on Sat Sep 11 18:48:58 2021
 
 @author: mac
 """
@@ -13,7 +13,6 @@ from torch.autograd import Variable
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.integrate import odeint
 
 ## set random seed: 
 np.random.seed(137)
@@ -21,35 +20,51 @@ torch.manual_seed(137)
     
 # hyperparameters
 input_size = 3
-eigen_dim = 100 ## dimension of the eigenspace
+eigen_dim = 15 ## dimension of the eigenspace
 hidden_size = 100
 
-class Encoder:
-    ## We are using the theory of random projections here, specifically 
-    ## the Johnson-Lindenstrauss lemma. 
-
+class Encoder(nn.Module):
+    
     def __init__(self):
-        self.encode_ = np.random.normal(size=(eigen_dim,3))
-        self.decode_ = np.linalg.solve(self.encode_.T.dot(self.encode_), self.encode_.T)
-
-    def encode(self,x):
-        return torch.matmul(torch.from_numpy(self.encode_).float(),x)
+        super(Encoder, self).__init__()
+        self.l1 = nn.Linear(input_size, hidden_size)
+        self.relu = nn.ReLU()
+        self.l2 = nn.Linear(hidden_size, hidden_size)
+        self.l3 = nn.Linear(hidden_size, eigen_dim)
+        self.l4 = nn.Linear(eigen_dim, hidden_size)
+        self.l5 = nn.Linear(hidden_size, input_size)
+        
+    def encode(self, x):
+        x = self.l1(x)
+        x = self.relu(x)
+        x = self.l2(x)
+        x = self.relu(x)
+        x = self.l3(x)
+        return x
     
     def decode(self,x):
-        return torch.matmul(torch.from_numpy(self.decode_).float(),x)
-            
-decoder = Encoder()
+        x = self.l4(x)
+        x = self.relu(x)
+        x = self.l2(x)
+        x = self.relu(x)
+        x = self.l5(x)
+        return x
+    
+encoder = Encoder()
+                
+encoder.load_state_dict(torch.load('/Users/mac/Desktop/Koopman/lorenz/models/encoder.h5'))
+
+encoder.eval()
+
             
 ## data path: 
 data_path = '/Users/mac/Desktop/Koopman/lorenz/data/'
 
 ### create dataframes: 
 train_data = pd.read_csv(data_path + 'train.csv', sep=",",index_col=0)
-test_data = pd.read_csv(data_path + 'test.csv', sep=",",index_col=0)
 
 ### instantiate tensors for training and test data: 
 x_train = torch.FloatTensor(train_data.values)
-x_test = torch.FloatTensor(test_data.values)
 
 ## use a deep network to approximate the eigenfunctions of a Koopman operator:
 class Koopman(nn.Module):
@@ -61,7 +76,7 @@ class Koopman(nn.Module):
         self.l2 = nn.Linear(hidden_size, hidden_size)
         self.l3 = nn.Linear(hidden_size, eigen_dim)
                 
-    def forward(self, x):
+    def forward(self, x):        
         x = self.l1(x)
         x = self.relu(x)
         
@@ -97,9 +112,8 @@ loss_log = []
 ## training parameters: 
 period = 4000 ## the trajectory length
 epochs = 5
-batch_size = 128
-learning_rate = 0.001
-horizon = 5
+batch_size = 100
+horizon = 10
 iters= 0
 
 ## perform gradient clipping: 
@@ -113,11 +127,11 @@ def loss(x,iters,horizon):
     x_in = Variable(x_mini)
     x_out = Variable(x_mini_)
                 
-    prediction = K2(decoder.encode(x_in.T).T,1)
+    prediction = K2(encoder.encode(x_in),1)
     
-    net_out = decoder.decode(prediction.T)
+    net_out = encoder.decode(prediction)
     
-    loss = 0.1*loss_fn(net_out, x_out.T) + loss_fn(prediction,decoder.encode(x_out.T).T)
+    loss = 0.1*loss_fn(net_out, x_out) + loss_fn(prediction,encoder.encode(x_out))
     
     for h in range(2,horizon):
         
@@ -126,14 +140,42 @@ def loss(x,iters,horizon):
         x_in = Variable(x_mini)
         x_out = Variable(x_mini_)
                 
-        prediction = K2(decoder.encode(x_in.T).T,h)
+        prediction = K2(encoder.encode(x_in),h)
         
-        net_out = decoder.decode(prediction.T)
+        net_out = encoder.decode(prediction)
         
         ## the prediction loss and the linearity loss: 
-        loss += 0.1*loss_fn(net_out, x_out.T) + loss_fn(prediction,decoder.encode(x_out.T).T)
+        loss += 0.1*loss_fn(net_out, x_out) + loss_fn(prediction,encoder.encode(x_out))
         
     return loss/horizon
+
+def future_state(y,horizon): 
+    
+    z = torch.from_numpy(y).float()
+    
+    forward = K2(encoder.encode(z),horizon)
+    
+    z_ = encoder.decode(forward)
+    
+    return z_.cpu().detach().numpy()
+
+def visual_test():
+    
+    y_hat = np.zeros((3,1000))
+        
+    state0 = np.random.rand(3)
+    
+    y_hat[:,0] = state0
+    
+    for i in range(1,999):
+                
+        y_hat[:,i+1] = future_state(y_hat[:,i],5)
+    
+    fig = plt.figure()
+    ax = fig.gca(projection="3d")
+    ax.plot(y_hat[0], y_hat[1], y_hat[2])
+    plt.draw()
+    plt.show()
 
 ## Train Koopman network: 
 for e in range(epochs):
@@ -156,7 +198,9 @@ for e in range(epochs):
         if iters % 100 == 0:
             loss_log.append(loss_.data)
             
-            print(iters)
+            print(loss_.data)
+            
+            visual_test()
             
         iters +=1
         
@@ -172,6 +216,12 @@ torch.save(koopman.state_dict(), PATH)
 
 ## Evaluate the model after training: 
 loss_log = []
+
+### create dataframes: 
+test_data = pd.read_csv(data_path + 'train.csv', sep=",",index_col=0)
+
+### instantiate tensors for training and test data: 
+x_test = torch.FloatTensor(test_data.values)
 
 ## Evaluate Koopman network: 
 while iters < x_test.shape[0]-batch_size-horizon:      
@@ -189,44 +239,3 @@ while iters < x_test.shape[0]-batch_size-horizon:
         print(loss_.data)
         
     iters +=1
-    
-## Try using the Koopman Operator to interpolate missing data: 
-def future_state(y,horizon): 
-    
-    z = torch.from_numpy(y).float()
-    
-    forward = K2(decoder_.encode(z.T).T,horizon)
-    
-    z_ = decoder_.decode(forward)
-    
-    return z_.cpu().detach().numpy()
-
-
-## use a random initial state: 
-state_0 = np.random.rand(3)
-
-## numerical integration of exact model: 
-traj = odeint(f, state_0, t)
-
-fig = plt.figure()
-ax = fig.gca(projection="3d")
-ax.plot(traj[:,0], traj[:,1], traj[:,1])
-plt.draw()
-plt.show()
-
-traj_ = np.array(traj)
-
-## Interpolating missing values using the Koopman operator: 
-for i in range(len(traj_)-5):
-    
-    if np.random.rand() > 0.5:
-        
-        traj_[i+2] = future_state(traj_[i],2)
-        
-fig = plt.figure()
-ax = fig.gca(projection="3d")
-ax.plot(traj_[:,0], traj_[:,1], traj_[:,1])
-plt.draw()
-plt.show()
-
-mean_squared_error = np.square(np.subtract(traj, traj_)).mean()
