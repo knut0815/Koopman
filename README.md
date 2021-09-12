@@ -22,9 +22,9 @@ A deep learning library for global and exact linearisation of non-linear systems
 
 1. Global linearisation of the Lorenz system:
 
-    1. Approximate Koopman operator for future-state prediction, 2-5 time increments into the future. On average, ~0.10 Mean Squared Error on test set. For the training data, only five trajectories were used with 4000 observations per trajectory. 
+    1. Approximate Koopman operator for future-state prediction, 2-5 time increments into the future. On average, ~0.10 Mean Squared Error on test set. For the training data, only five trajectories were used with 4000 observations per trajectory.
 
-    2. Code: (1) [Simulated data for the Lorenz system](https://github.com/AidanRocke/Koopman/blob/main/Lorenz_system/simulated_data.py), (2) [Model training and evaluation](https://github.com/AidanRocke/Koopman/blob/main/Lorenz_system/lorenz_koopman.py).
+    2. Code: (1) [Simulated data for the Lorenz system](https://github.com/AidanRocke/Koopman/blob/main/Lorenz_system/simulated_data.py), (2) [Koopman approximation](https://github.com/AidanRocke/Koopman/blob/main/Lorenz_system/koopman_approximation.py), (3) [Model evaluation](https://github.com/AidanRocke/Koopman/blob/main/Lorenz_system/model_evaluation.py).
 
 ![Exact Lorenz System](https://raw.githubusercontent.com/AidanRocke/Koopman/main/Lorenz_system/images/exact_lorenz.png)
 <figcaption align = "center"><b>Exact Lorenz System</b></figcaption>
