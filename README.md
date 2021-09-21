@@ -41,7 +41,7 @@ A deep learning library for global and exact linearisation of non-linear systems
 ![Exact limit cycle](https://raw.githubusercontent.com/AidanRocke/Koopman/main/von_karman/images/exact_von_karman.png)
 <figcaption align = "center"><b>Exact limit cycle</b></figcaption>
 
-![Interpolated limit cycle](https://raw.githubusercontent.com/AidanRocke/Koopman/main/Lorenz_system/images/interpolated_von_karman.png)
+![Interpolated limit cycle](https://raw.githubusercontent.com/AidanRocke/Koopman/main/von_karman/images/interpolated_von_karman.png)
 <figcaption align = "center"><b>Interpolated limit cycle</b></figcaption>
 
 ## References:
