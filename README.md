@@ -38,11 +38,11 @@ A deep learning library for global and exact linearisation of non-linear systems
 
     2. Code: (1) [Simulated data for the system](https://github.com/AidanRocke/Koopman/blob/main/von_karman/simulated_data.py), (2) [Koopman approximation](https://github.com/AidanRocke/Koopman/blob/main/von_karman/koopman_approximation.py), (3) [Model evaluation](https://github.com/AidanRocke/Koopman/blob/main/von_karman/model_evaluation.py).
 
-![Exact Lorenz System](https://raw.githubusercontent.com/AidanRocke/Koopman/main/von_karman/images/exact_von_karman.png)
-<figcaption align = "center"><b>Exact Lorenz System</b></figcaption>
+![Exact limit cycle](https://raw.githubusercontent.com/AidanRocke/Koopman/main/von_karman/images/exact_von_karman.png)
+<figcaption align = "center"><b>Exact limit cycle</b></figcaption>
 
-![Interpolated Lorenz System](https://raw.githubusercontent.com/AidanRocke/Koopman/main/Lorenz_system/images/approximate_von_karman.png)
-<figcaption align = "center"><b>Interpolated Lorenz System</b></figcaption>
+![Interpolated limit cycle](https://raw.githubusercontent.com/AidanRocke/Koopman/main/Lorenz_system/images/interpolated_von_karman.png)
+<figcaption align = "center"><b>Interpolated limit cycle</b></figcaption>
 
 ## References:
 
