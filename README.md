@@ -32,6 +32,18 @@ A deep learning library for global and exact linearisation of non-linear systems
 ![Interpolated Lorenz System](https://raw.githubusercontent.com/AidanRocke/Koopman/main/Lorenz_system/images/approximate_lorenz.png)
 <figcaption align = "center"><b>Interpolated Lorenz System</b></figcaption>
 
+2. Global linearisation of von Karman vortex shedding:
+
+    1. Approximate Koopman operator for future-state prediction, 5-10 time increments into the future. On average, ~0.01 Mean Squared Error on test set. For the training data, only five trajectories were used with 4000 observations per trajectory.
+
+    2. Code: (1) [Simulated data for the system](https://github.com/AidanRocke/Koopman/blob/main/von_karman/simulated_data.py), (2) [Koopman approximation](https://github.com/AidanRocke/Koopman/blob/main/von_karman/koopman_approximation.py), (3) [Model evaluation](https://github.com/AidanRocke/Koopman/blob/main/von_karman/model_evaluation.py).
+
+![Exact Lorenz System](https://raw.githubusercontent.com/AidanRocke/Koopman/main/von_karman/images/exact_von_karman.png)
+<figcaption align = "center"><b>Exact Lorenz System</b></figcaption>
+
+![Interpolated Lorenz System](https://raw.githubusercontent.com/AidanRocke/Koopman/main/Lorenz_system/images/approximate_von_karman.png)
+<figcaption align = "center"><b>Interpolated Lorenz System</b></figcaption>
+
 ## References:
 
 1. Bernard Koopman. Hamiltonian systems and Transformations in Hilbert Space. 1931.
