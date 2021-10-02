@@ -67,7 +67,9 @@ train_data = pd.read_csv(data_path + 'train.csv', sep=",",index_col=0)
 x_train = torch.FloatTensor(train_data.values)
 
 ## use a deep network to approximate the eigenfunctions of a Koopman operator:
+
 class Koopman(nn.Module):
+    ## this particular network includes a residual layer: 
     
     def __init__(self):
         super(Koopman, self).__init__()
@@ -77,15 +79,15 @@ class Koopman(nn.Module):
         self.l3 = nn.Linear(hidden_size, eigen_dim)
                 
     def forward(self, x):        
-        x = self.l1(x)
-        x = self.relu(x)
+        x1 = self.l1(x)
+        x2 = self.relu(x1)
         
-        x = self.l2(x)
-        x = self.relu(x)
+        x3 = self.l2(x2)
+        x4 = self.relu(x3)
                 
-        x = self.l3(x)
+        x5 = self.l3(x4)
         
-        return x
+        return x5 + x
     
 koopman = Koopman()
 

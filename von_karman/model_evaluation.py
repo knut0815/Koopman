@@ -24,6 +24,7 @@ eigen_dim = 15 ## dimension of the eigenspace
 hidden_size = 100
 
 class Koopman(nn.Module):
+    ## this particular network includes a residual layer: 
     
     def __init__(self):
         super(Koopman, self).__init__()
@@ -31,14 +32,17 @@ class Koopman(nn.Module):
         self.relu = nn.ReLU()
         self.l2 = nn.Linear(hidden_size, hidden_size)
         self.l3 = nn.Linear(hidden_size, eigen_dim)
+                
+    def forward(self, x):        
+        x1 = self.l1(x)
+        x2 = self.relu(x1)
         
-    def forward(self, x):
-        x = self.l1(x)
-        x = self.relu(x)
-        x = self.l2(x)
-        x = self.relu(x)
-        x = self.l3(x)
-        return x
+        x3 = self.l2(x2)
+        x4 = self.relu(x3)
+                
+        x5 = self.l3(x4)
+        
+        return x5 + x
     
 koopman = Koopman()
 
