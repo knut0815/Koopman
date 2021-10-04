@@ -18,6 +18,18 @@ A deep learning library for global and exact linearisation of non-linear systems
     The exact and global linearisation of non-linear systems allows us to leverage
     powerful and principled methods for controlling linear systems.
 
+## The theoretical minimum:
+
+1. [Dynamical systems and the Koopman Operator](https://keplerlounge.com/physics/2021/09/30/koopman-operator.html)
+
+2. [The Buckingham-Pi theorem, or the fundamental theorem of Dimensionless Analysis](https://keplerlounge.com/physics/2021/09/30/buckingham-pi.html)
+
+3. [Koopman Modes via Singular Value Decomposition](https://keplerlounge.com/physics/2021/10/01/SVD-DMD.html)
+
+4. [The Koopman Operator as a Discrete Fourier Transform for dynamical systems](https://keplerlounge.com/physics/2021/10/01/koopman-DFT.html)
+
+5. [Deep Koopman Operators, the Identity Operator, and Euler's method](https://keplerlounge.com/physics/2021/10/03/koopman-euler.html)
+
 ## Examples:
 
 1. Global linearisation of the Lorenz system:
@@ -34,7 +46,7 @@ A deep learning library for global and exact linearisation of non-linear systems
 
 2. Global linearisation of von Karman vortex shedding:
 
-    1. Approximate Koopman operator for future-state prediction, 5-10 time increments into the future. On average, ~0.01 Mean Squared Error on test set. For the training data, only five trajectories were used with 4000 observations per trajectory.
+    1. Approximate Koopman operator for future-state prediction, 5-10 time increments into the future. On average, ~0.01 Mean Squared Error on test set. For the training data, only five trajectories were used with 4000 observations per trajectory which is less than 0.1% of the data used in [4].
 
     2. Code: (1) [Simulated data for the system](https://github.com/AidanRocke/Koopman/blob/main/von_karman/simulated_data.py), (2) [Koopman approximation](https://github.com/AidanRocke/Koopman/blob/main/von_karman/koopman_approximation.py), (3) [Model evaluation](https://github.com/AidanRocke/Koopman/blob/main/von_karman/model_evaluation.py). Finally, with the [Von Neumann entropy]((https://github.com/AidanRocke/Koopman/blob/main/von_karman/von_neumann_entropy.py)) we find that (4) three dimensions contain 95% of the information in the dynamical system.  
 
